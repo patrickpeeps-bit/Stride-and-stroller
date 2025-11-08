@@ -1,0 +1,44 @@
+setCurrentView(VIEWS.MAIN); // Fallback
+}
+break;
+case VIEWS.LOADING:
+default:
+appContent.innerHTML = renderLoadingScreen();
+break;
+}
+};
+
+// Render the loading screen
+const renderLoadingScreen = () => {
+return `
+<div class="text-center p-16 flex flex-col items-center justify-center h-full">
+<div class="loader !w-12 !h-12 !border-8"></div>
+<p class="text-xl text-stride-primary font-semibold mt-4">Loading Stride & Stroller...</p>
+</div>
+`;
+};
+
+// Render the initial user setup screen
+const renderSetupScreen = () => {
+return `
+<div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg mt-8">
+<h2 class="text-3xl font-bold text-center text-stroller-accent mb-6">👋 Welcome!</h2>
+<p class="text-gray-600 text-center mb-6">Before you join a walk, please set up your profile.</p>
+<form id="setup-form" onsubmit="event.preventDefault(); createProfile();">
+<div class="mb-4">
+<label for="userName" class="block text-gray-700 font-medium mb-2">Your Name/Nickname</label>
+<input type="text" id="userName" name="userName" required
+class="w-full p-3 border border-gray-300 rounded-lg focus:ring-stroller-accent focus:border-stroller-accent"
+placeholder="e.g., Jane D. or The Stroller Dad">
+</div>
+<div class="mb-6">
+<label for="userTimezone" class="block text-gray-700 font-medium mb-2">Your Timezone</label>
+<select id="userTimezone" name="userTimezone" required
+class="w-full p-3 border border-gray-300 rounded-lg focus:ring-stroller-accent focus:border-stroller-accent">
+${TIMEZONES.map(tz => `<option value="${tz}" ${tz === 'America/New_York' ? 'selected' : ''}>${tz.replace('America/', '').replace('_', ' ')}</option>`).join('')}
+</select>
+</div>
+<button type="submit" id="setup-submit-btn" class="w-full bg-stride-primary text-white p-3 rounded-lg font-semibold hover:bg-green-600 transition duration-150">
+${isSaving ? '<span class="loader !w-4 !h-4 !border-2 !border-t-white"></span> Saving...' : 'Complete Setup'}
+</button>
+</
