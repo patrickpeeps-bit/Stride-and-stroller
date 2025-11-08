@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Markdown Previewer</title>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Container for the app */
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1200px;
+            gap: 20px;
+        }
+
+        /* Responsive Layout for Input/Output */
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row;
+                height: 80vh; /* Set a specific height for dual view */
+            }
+        }
+
+        /* Input and Output Panels */
+        .panel {
+            flex: 1;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #343a40;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+
+        #editor {
+            flex-grow: 1;
+            width: 100%;
+            min-height: 200px;
+            border: none;
+            resize: none;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            outline: none;
+            border-radius: 8px;
+            background-color: #f1f3f5;
+            transition: border-color 0.2s;
+        }
+
+        #editor:focus {
+            border-color: #007bff;
+        }
+
+        #preview {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        /* Style the rendered Markdown output */
+        #preview h1 { border-bottom: 2px solid #adb5bd; padding-bottom: 0.3em; margin-top: 0; }
+        #preview h2 { border-bottom: 1px dashed #adb5bd; padding-bottom: 0.3em; }
+        #preview code { background-color: #e9ecef; padding: 2px 4px; border-radius: 4px; font-size: 0.9em; }
+        #preview pre { background-color: #343a40; color: white; padding: 15px; border-radius: 8px; overflow-x: auto; }
+        #preview blockquote { border-left: 4px solid #007bff; color: #6c757d; padding-left: 15px; margin: 15px 0; }
+        #preview ul, #preview ol { margin-left: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!--
