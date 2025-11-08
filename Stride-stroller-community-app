@@ -1,0 +1,84 @@
+{
+  "name": "stride-stroller-community-app",
+  "version": "1.0.0",
+  "description": "A community walking and stroller group tracker built with a single HTML file and Firebase.",
+  "main": "public/index.html",
+  "scripts": {
+    "start": "firebase serve --only hosting",
+    "deploy": "firebase deploy --only hosting"
+  },
+  "dependencies": {
+    "firebase-tools": "^13.0.0"
+  }
+}
+
+
+#### D. `firebase.json` (Hosting Configuration)
+
+This directs Firebase to serve files from the `public` folder and to treat `index.html` as the main app page.
+
+```json
+{
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
+
+
+#### E. `public/manifest.json` (PWA Configuration)
+
+This enables the user to "Add to Home Screen" and defines the icon's look when installed.
+
+```json
+{
+  "name": "Stride & Stroller Community",
+  "short_name": "StrideStroller",
+  "description": "Organize and find local walking and stroller groups.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#E8F5E9",
+  "theme_color": "#4CAF50",
+  "icons": [
+    {
+      "src": "/assets/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+
+
+#### F. `public/404.html` (Error Page)
+
+A simple page to catch broken links.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+</head>
+<body style="font-family: sans-serif; text-align: center; padding: 50px;">
+    <h1>404</h1>
+    <p>Oops! We couldn't find that walk. The page you're looking for doesn't exist.</p>
+    <p><a href="/">Go to the homepage</a></p>
+</body>
+</html>
