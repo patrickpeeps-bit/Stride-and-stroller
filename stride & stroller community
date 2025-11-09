@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stride & Stroller Community</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Leaflet map CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
+  />
+
+  <style>
+    body { font-family: Inter, sans-serif; min-height: 100vh; background-color: #f3f4f6; }
+    header { background-color: #4CAF50; color: white; padding: 1rem; }
+    #map { height: 300px; border-radius: 12px; margin-top: 1rem; }
+    .card { background: white; border-radius: 12px; padding: 1rem; margin: 1rem 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="text-2xl font-bold">Stride & Stroller Community</h1>
+    <p id="user-info" class="text-sm opacity-90">Initializing...</p>
+  </header>
+
+  <main id="content" class="p-4">
+    <p class="text-gray-500">Loading app...</p>
+  </main>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <!-- Firebase (modular imports) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { 
+      getAuth, signInAnonymously, onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { 
+      getFirestore, collection, addDoc, getDocs, serverTimestamp 
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // 🔥 YOUR FIREBASE CONFIG HERE 🔥
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const content = document.getElementById('content');
+    const userInfo = document.getElementById('user-info');
+
+    // Sign in anonymously
+    signInAnonymously(auth)
+      .then(() => console.log("Signed in anonymously"))
+      .catch(console.error);
+
+    // Auth listener
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) return;
+      userInfo.textContent = `Signed in as UID: ${user.uid.substring(0,8)}...`;
+
+      // Simple Firestore example
+      const walksCol = collection(db, "walks");
+
+      // Add a sample walk if none exist
+      const snapshot = await getDocs(walksCol);
+      if (snapshot.empty) {
+        await addDoc(walksCol, {
+          title: "Morning Walk",
+          location: "Central Park",
+          createdAt: serverTimestamp()
+        });
+      }
+
+      // Read walks
+      const walks = await getDocs(walksCol);
+      let html = '';
+      walks.forEach(doc => {
+        const data = doc.data();
+        html += `
+          <div class="card">
+            <h2 class="font-bold">${data.title}</h2>
+            <p>${data.location}</p>
+          </div>
+        `;
+      });
+      content.innerHTML = html;
+    });
+  </script>
+</body>
+</html>
